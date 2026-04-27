@@ -48,6 +48,7 @@ class AuthenticationTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');
+        $response->dump();
 
         $this->assertGuest();
         $response->assertRedirect('/');

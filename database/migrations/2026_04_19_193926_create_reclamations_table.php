@@ -11,11 +11,13 @@ return new class extends Migration {
             $table->string('titre');
             $table->text('description');
             $table->date('date')->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->default('other'); // meeting, bug, other
+            $table->string('type_other')->nullable();  // custom text if type=other
             $table->text('reponce')->nullable();
             $table->string('priorite')->default('moyenne');
             $table->string('status')->default('ouvert');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

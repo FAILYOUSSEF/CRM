@@ -1,22 +1,24 @@
 <?php
-
 namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Reclamation;
 use Illuminate\Http\Request;
-
+ 
 class ReclamationController extends Controller {
-    public function index() {
-        $reclamations = Reclamation::where('user_id', auth()->id())->latest()->paginate(15);
+    public function index(Request $request) {
+        $q = Reclamation::where('user_id',auth()->id());
+        if ($request->search) $q->where('titre','like',"%{$request->search}%");
+        if ($request->status) $q->where('status',$request->status);
+        $reclamations = $q->latest()->paginate(15)->withQueryString();
         return view('client.reclamations.index', compact('reclamations'));
     }
     public function create() { return view('client.reclamations.create'); }
     public function store(Request $request) {
         $data = $request->validate([
-            'titre'       => 'required|string|max:255',
-            'description' => 'required|string',
-            'type'        => 'nullable|string',
-            'priorite'    => 'required|in:faible,moyenne,haute',
+            'titre'=>'required','description'=>'required',
+            'type'=>'required|in:meeting,bug,other',
+            'type_other'=>'nullable|required_if:type,other',
+            'priorite'=>'required|in:faible,moyenne,haute',
         ]);
         $data['user_id'] = auth()->id();
         $data['date']    = now()->toDateString();

@@ -34,7 +34,7 @@
                     id="password"
                     name="password"
                     type="password"
-                    class="mt-1 block w-3/4"
+                    class="mt-1 block w-3/4 bg-crm-bg3 border-crm-border text-crm-text"
                     placeholder="{{ __('Password') }}"
                 />
 

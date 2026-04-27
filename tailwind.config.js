@@ -9,6 +9,8 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
+    darkMode: 'class',
+
     theme: {
         extend: {
             fontFamily: {
@@ -16,14 +18,14 @@ export default {
             },
             colors: {
                 crm: {
-                    bg: '#0f172a',      // Dark slate background
-                    bg2: '#1a2849',     // Secondary background
-                    bg3: '#243456',     // Tertiary background
-                    surface: '#2d4263', // Surface/card background
-                    text: '#f1f5f9',    // Light text
-                    muted: '#94a3b8',   // Muted text
-                    accent: '#3b82f6',  // Professional blue
-                    border: 'rgba(148, 163, 184, 0.12)',
+                    bg: 'var(--color-crm-bg)',
+                    bg2: 'var(--color-crm-bg2)',
+                    bg3: 'var(--color-crm-bg3)',
+                    surface: 'var(--color-crm-surface)',
+                    text: 'var(--color-crm-text)',
+                    muted: 'var(--color-crm-muted)',
+                    accent: 'var(--color-crm-accent)',
+                    border: 'var(--color-crm-border)',
                 }
             },
             spacing: {

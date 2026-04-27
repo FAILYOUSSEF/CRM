@@ -3,28 +3,36 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\Categorie;
+use App\Models\Project;
 use Illuminate\Http\Request;
-
+ 
 class TicketController extends Controller {
-    public function index() {
-        $tickets = Ticket::where('user_id', auth()->id())->with('project','category')->latest()->paginate(15);
+    public function index(Request $request) {
+        $q = Ticket::where('user_id',auth()->id())->with('project','category');
+        if ($request->search) $q->where('sujet','like',"%{$request->search}%");
+        if ($request->status) $q->where('status',$request->status);
+        $tickets = $q->latest()->paginate(15)->withQueryString();
         return view('client.tickets.index', compact('tickets'));
     }
     public function create() {
-        $projects   = auth()->user()->clientProjects;
+        // Only completed projects
+        $projects   = auth()->user()->clientProjects()->where('status','terminé')->get();
         $categories = Categorie::all();
         return view('client.tickets.create', compact('projects','categories'));
     }
     public function store(Request $request) {
         $data = $request->validate([
-            'sujet'       => 'required|string|max:255',
-            'message'     => 'required|string',
-            'description' => 'nullable|string',
-            'priorite'    => 'required|in:faible,moyenne,haute',
-            'deadline'    => 'nullable|date',
-            'project_id'  => 'required|exists:projects,id',
-            'category_id' => 'nullable|exists:categories,id',
+            'sujet'=>'required','message'=>'required','description'=>'nullable',
+            'priorite'=>'required|in:faible,moyenne,haute',
+            'deadline'=>'nullable|date','project_id'=>'required|exists:projects,id',
+            'category_id'=>'nullable|exists:categories,id',
         ]);
+        
+        // Check project is completed
+        $project = Project::findOrFail($request->project_id);
+        if ($project->client_id !== auth()->id() || $project->status !== 'terminé') {
+            return back()->with('error','You can only submit tickets for completed projects.');
+        }
         $data['user_id'] = auth()->id();
         Ticket::create($data);
         return redirect()->route('client.tickets.index')->with('success','Ticket submitted.');

@@ -1,80 +1,89 @@
 <?php
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin;
-use App\Http\Controllers\Employee;
-use App\Http\Controllers\Client;
+// FILE: routes/web.php
 
-// Auth routes (Breeze)
+use Illuminate\Support\Facades\Route;
+
 require __DIR__.'/auth.php';
 
-// Root redirect
 Route::get('/', function () {
-    if (auth()->check()) {
-        $user = auth()->user();
-        if ($user->isAdmin())    return redirect('/admin/projects');
-        if ($user->isEmployee()) return redirect('/employee/tasks');
-        if ($user->isClient())   return redirect('/client/tickets');
-    }
-    return redirect('/login');
+    if (!auth()->check()) return redirect('/login');
+    $user = auth()->user();
+    if ($user->isAdmin())    return redirect('/admin/projects');
+    if ($user->isEmployee()) return redirect('/employee/tasks');
+    if ($user->isClient())   return redirect('/client/projects');
+    return redirect('/dashboard');
 });
 
-// ──────────────────────────────────────────────────────────
-// ADMIN routes
-// ──────────────────────────────────────────────────────────
-Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function () {
-
-    // Projects
-    Route::resource('projects', Admin\ProjectController::class);
-
-    // Users
-    Route::resource('users', Admin\UserController::class);
-
-    // Tasks (admin view all)
-    Route::resource('tasks', Admin\TaskController::class);
-
-    // Tickets (admin manages replies)
-    Route::get('tickets',          [Admin\TicketController::class, 'index'])->name('tickets.index');
-    Route::get('tickets/{ticket}', [Admin\TicketController::class, 'show'])->name('tickets.show');
-    Route::post('tickets/{ticket}/reply', [Admin\TicketController::class, 'reply'])->name('tickets.reply');
-    Route::delete('tickets/{ticket}',     [Admin\TicketController::class, 'destroy'])->name('tickets.destroy');
-
-    // Reclamations (admin manages replies)
-    Route::get('reclamations',                    [Admin\ReclamationController::class, 'index'])->name('reclamations.index');
-    Route::get('reclamations/{reclamation}',      [Admin\ReclamationController::class, 'show'])->name('reclamations.show');
-    Route::post('reclamations/{reclamation}/reply',[Admin\ReclamationController::class, 'reply'])->name('reclamations.reply');
-    Route::delete('reclamations/{reclamation}',   [Admin\ReclamationController::class, 'destroy'])->name('reclamations.destroy');
-
-    // Categories
-    Route::resource('categories', Admin\CategorieController::class);
+// ── COMMON AUTH ROUTES ────────────────────────────────────────
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        $projectCount = \App\Models\Project::count();
+        $taskCount = \App\Models\Task::count();
+        $ticketCount = \App\Models\Ticket::count();
+        return view('dashboard', compact('projectCount', 'taskCount', 'ticketCount'));
+    })->name('dashboard');
+    
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ──────────────────────────────────────────────────────────
-// EMPLOYEE routes
-// ──────────────────────────────────────────────────────────
-Route::middleware(['auth','employee'])->prefix('employee')->name('employee.')->group(function () {
+// ── ADMIN ─────────────────────────────────────────────────────
+Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('projects',   App\Http\Controllers\Admin\ProjectController::class);
+    Route::resource('users',      App\Http\Controllers\Admin\UserController::class);
+    Route::resource('roles',      App\Http\Controllers\Admin\RoleController::class);
+    Route::resource('tasks',      App\Http\Controllers\Admin\TaskController::class);
+    Route::resource('categories', App\Http\Controllers\Admin\CategorieController::class);
 
-    Route::get('tasks',             [Employee\TaskController::class, 'index'])->name('tasks.index');
-    Route::get('tasks/{task}',      [Employee\TaskController::class, 'show'])->name('tasks.show');
-    Route::patch('tasks/{task}',    [Employee\TaskController::class, 'update'])->name('tasks.update');
+    // Tickets
+    Route::get('tickets',                           [App\Http\Controllers\Admin\TicketController::class,'index'])->name('tickets.index');
+    Route::get('tickets/{ticket}',                  [App\Http\Controllers\Admin\TicketController::class,'show'])->name('tickets.show');
+    Route::post('tickets/{ticket}/reply',           [App\Http\Controllers\Admin\TicketController::class,'reply'])->name('tickets.reply');
+    Route::delete('tickets/{ticket}',               [App\Http\Controllers\Admin\TicketController::class,'destroy'])->name('tickets.destroy');
 
-    Route::get('reclamations',       [Employee\ReclamationController::class, 'index'])->name('reclamations.index');
-    Route::get('reclamations/create',[Employee\ReclamationController::class, 'create'])->name('reclamations.create');
-    Route::post('reclamations',      [Employee\ReclamationController::class, 'store'])->name('reclamations.store');
-    Route::get('reclamations/{reclamation}', [Employee\ReclamationController::class, 'show'])->name('reclamations.show');
+    // Reclamations
+    Route::get('reclamations',                      [App\Http\Controllers\Admin\ReclamationController::class,'index'])->name('reclamations.index');
+    Route::get('reclamations/{reclamation}',        [App\Http\Controllers\Admin\ReclamationController::class,'show'])->name('reclamations.show');
+    Route::post('reclamations/{reclamation}/reply', [App\Http\Controllers\Admin\ReclamationController::class,'reply'])->name('reclamations.reply');
+    Route::post('reclamations/{reclamation}/assign',[App\Http\Controllers\Admin\ReclamationController::class,'assign'])->name('reclamations.assign');
+    Route::delete('reclamations/{reclamation}',     [App\Http\Controllers\Admin\ReclamationController::class,'destroy'])->name('reclamations.destroy');
+
+    // Meetings
+    Route::resource('meetings', App\Http\Controllers\Admin\MeetingController::class);
+    Route::post('meeting-requests/{meetingRequest}/accept', [App\Http\Controllers\Admin\MeetingController::class,'acceptRequest'])->name('meeting-requests.accept');
+    Route::post('meeting-requests/{meetingRequest}/refuse', [App\Http\Controllers\Admin\MeetingController::class,'refuseRequest'])->name('meeting-requests.refuse');
 });
 
-// ──────────────────────────────────────────────────────────
-// CLIENT routes
-// ──────────────────────────────────────────────────────────
-Route::middleware(['auth','client'])->prefix('client')->name('client.')->group(function () {
+// ── EMPLOYEE ──────────────────────────────────────────────────
+Route::middleware(['auth','role:employee'])->prefix('employee')->name('employee.')->group(function () {
+    Route::resource('projects', App\Http\Controllers\Employee\ProjectController::class)->only(['index','show','edit','update']);
+    Route::get('tasks',                      [App\Http\Controllers\Employee\TaskController::class,'index'])->name('tasks.index');
+    Route::get('tasks/{task}',               [App\Http\Controllers\Employee\TaskController::class,'show'])->name('tasks.show');
+    Route::patch('tasks/{task}',             [App\Http\Controllers\Employee\TaskController::class,'update'])->name('tasks.update');
+    Route::get('reclamations',               [App\Http\Controllers\Employee\ReclamationController::class,'index'])->name('reclamations.index');
+    Route::get('reclamations/create',        [App\Http\Controllers\Employee\ReclamationController::class,'create'])->name('reclamations.create');
+    Route::post('reclamations',              [App\Http\Controllers\Employee\ReclamationController::class,'store'])->name('reclamations.store');
+    Route::get('reclamations/{reclamation}', [App\Http\Controllers\Employee\ReclamationController::class,'show'])->name('reclamations.show');
+    Route::get('meetings',                   [App\Http\Controllers\Employee\MeetingController::class,'index'])->name('meetings.index');
+    Route::get('meetings/{meeting}',         [App\Http\Controllers\Employee\MeetingController::class,'show'])->name('meetings.show');
+    Route::post('meetings/{meeting}/respond',[App\Http\Controllers\Employee\MeetingController::class,'respond'])->name('meetings.respond');
+});
 
-    Route::get('tickets',         [Client\TicketController::class, 'index'])->name('tickets.index');
-    Route::get('tickets/create',  [Client\TicketController::class, 'create'])->name('tickets.create');
-    Route::post('tickets',        [Client\TicketController::class, 'store'])->name('tickets.store');
-    Route::get('tickets/{ticket}',[Client\TicketController::class, 'show'])->name('tickets.show');
-
-    Route::get('reclamations',       [Client\ReclamationController::class, 'index'])->name('reclamations.index');
-    Route::get('reclamations/create',[Client\ReclamationController::class, 'create'])->name('reclamations.create');
-    Route::post('reclamations',      [Client\ReclamationController::class, 'store'])->name('reclamations.store');
-    Route::get('reclamations/{reclamation}', [Client\ReclamationController::class, 'show'])->name('reclamations.show');
+// ── CLIENT ────────────────────────────────────────────────────
+Route::middleware(['auth','role:client'])->prefix('client')->name('client.')->group(function () {
+    Route::resource('projects', App\Http\Controllers\Client\ProjectController::class)->only(['index','show']);
+    Route::get('tickets',                    [App\Http\Controllers\Client\TicketController::class,'index'])->name('tickets.index');
+    Route::get('tickets/create',             [App\Http\Controllers\Client\TicketController::class,'create'])->name('tickets.create');
+    Route::post('tickets',                   [App\Http\Controllers\Client\TicketController::class,'store'])->name('tickets.store');
+    Route::get('tickets/{ticket}',           [App\Http\Controllers\Client\TicketController::class,'show'])->name('tickets.show');
+    Route::get('reclamations',               [App\Http\Controllers\Client\ReclamationController::class,'index'])->name('reclamations.index');
+    Route::get('reclamations/create',        [App\Http\Controllers\Client\ReclamationController::class,'create'])->name('reclamations.create');
+    Route::post('reclamations',              [App\Http\Controllers\Client\ReclamationController::class,'store'])->name('reclamations.store');
+    Route::get('reclamations/{reclamation}', [App\Http\Controllers\Client\ReclamationController::class,'show'])->name('reclamations.show');
+    Route::get('meetings',                   [App\Http\Controllers\Client\MeetingController::class,'index'])->name('meetings.index');
+    Route::get('meetings/request',           [App\Http\Controllers\Client\MeetingController::class,'requestMeeting'])->name('meetings.request');
+    Route::post('meetings/request',          [App\Http\Controllers\Client\MeetingController::class,'storeRequest'])->name('meetings.storeRequest');
+    Route::get('meetings/{meeting}',         [App\Http\Controllers\Client\MeetingController::class,'show'])->name('meetings.show');
+    Route::post('meetings/{meeting}/respond',[App\Http\Controllers\Client\MeetingController::class,'respond'])->name('meetings.respond');
 });

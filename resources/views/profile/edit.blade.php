@@ -1,29 +1,21 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-crm-text leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-crm-bg2 border border-crm-border rounded-crm-lg shadow-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+@section('content')
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-crm-text tracking-tight">Edit Profile</h1>
+    </div>
 
-            <div class="p-4 sm:p-8 bg-crm-bg2 border border-crm-border rounded-crm-lg shadow-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+    <div class="max-w-3xl space-y-6">
+        <div class="bg-crm-surface border border-crm-border rounded-crm p-6 shadow-sm">
+            @include('profile.partials.update-profile-information-form')
+        </div>
 
-            <div class="p-4 sm:p-8 bg-crm-bg2 border border-crm-border rounded-crm-lg shadow-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
+        <div class="bg-crm-surface border border-crm-border rounded-crm p-6 shadow-sm">
+            @include('profile.partials.update-password-form')
+        </div>
+
+        <div class="bg-red-500/10 border border-red-500/20 rounded-crm p-6 shadow-sm">
+            @include('profile.partials.delete-user-form')
         </div>
     </div>
-</x-app-layout>
+@endsection

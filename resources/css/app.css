@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+
+@layer base {
+  :root {
+    --color-crm-bg: #f8fafc;
+    --color-crm-bg2: #ffffff;
+    --color-crm-bg3: #f1f5f9;
+    --color-crm-surface: #ffffff;
+    --color-crm-text: #0f172a;
+    --color-crm-muted: #64748b;
+    --color-crm-accent: #ef4444;
+    --color-crm-border: rgba(0, 0, 0, 0.12);
+  }
+
+  .dark {
+    --color-crm-bg: #000000;
+    --color-crm-bg2: #111111;
+    --color-crm-bg3: #222222;
+    --color-crm-surface: #1a1a1a;
+    --color-crm-text: #ffffff;
+    --color-crm-muted: #a3a3a3;
+    --color-crm-accent: #ef4444;
+    --color-crm-border: rgba(255, 255, 255, 0.12);
+  }
+}
+

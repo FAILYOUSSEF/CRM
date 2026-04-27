@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('sujet');
             $table->text('message');
-            $table->string('status')->default('ouvert'); // ouvert, en cours, fermé
+            $table->string('status')->default('ouvert');
             $table->text('reponce')->nullable();
             $table->string('priorite')->default('moyenne');
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();

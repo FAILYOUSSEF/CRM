@@ -5,10 +5,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+ 
 class ProjectController extends Controller {
-    public function index() {
-        $projects = Project::with('client','employees')->latest()->paginate(10);
+    public function __construct() {
+        $this->middleware('permission:project-list',   ['only' => ['index','show']]);
+        $this->middleware('permission:project-create', ['only' => ['create','store']]);
+        $this->middleware('permission:project-edit',   ['only' => ['edit','update']]);
+        $this->middleware('permission:project-delete', ['only' => ['destroy']]);
+    }
+    public function index(Request $request) {
+        $q = Project::with('client','employees');
+        if ($request->search)   $q->where('titre','like',"%{$request->search}%");
+        if ($request->status)   $q->where('status',$request->status);
+        if ($request->priorite) $q->where('priorite',$request->priorite);
+        $projects = $q->latest()->paginate(10)->withQueryString();
         return view('admin.projects.index', compact('projects'));
     }
     public function create() {
@@ -18,20 +28,15 @@ class ProjectController extends Controller {
     }
     public function store(Request $request) {
         $data = $request->validate([
-            'titre'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date_duree'  => 'nullable|date',
-            'date_fin'    => 'nullable|date',
-            'status'      => 'required|in:en cours,terminé,annulé',
-            'priorite'    => 'required|in:faible,moyenne,haute',
-            'budget'      => 'nullable|numeric',
-            'client_id'   => 'nullable|exists:users,id',
-            'employees'   => 'nullable|array',
-            'ficher'      => 'nullable|file|max:10240',
+            'titre'=>'required|string|max:255','description'=>'nullable|string',
+            'date_debut'=>'nullable|date','date_fin'=>'nullable|date',
+            'status'=>'required|in:en cours,terminé,annulé',
+            'priorite'=>'required|in:faible,moyenne,haute',
+            'budget'=>'nullable|numeric','client_id'=>'nullable|exists:users,id',
+            'employees'=>'nullable|array','progress'=>'nullable|integer|min:0|max:100',
+            'ficher'=>'nullable|file|max:10240',
         ]);
-        if ($request->hasFile('ficher')) {
-            $data['ficher'] = $request->file('ficher')->store('projects','public');
-        }
+        if ($request->hasFile('ficher')) $data['ficher'] = $request->file('ficher')->store('projects','public');
         $project = Project::create($data);
         if ($request->employees) $project->employees()->sync($request->employees);
         return redirect()->route('admin.projects.index')->with('success','Project created.');
@@ -47,22 +52,17 @@ class ProjectController extends Controller {
     }
     public function update(Request $request, Project $project) {
         $data = $request->validate([
-            'titre'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date_duree'  => 'nullable|date',
-            'date_fin'    => 'nullable|date',
-            'status'      => 'required|in:en cours,terminé,annulé',
-            'priorite'    => 'required|in:faible,moyenne,haute',
-            'budget'      => 'nullable|numeric',
-            'client_id'   => 'nullable|exists:users,id',
-            'employees'   => 'nullable|array',
-            'ficher'      => 'nullable|file|max:10240',
+            'titre'=>'required|string|max:255','description'=>'nullable|string',
+            'date_debut'=>'nullable|date','date_fin'=>'nullable|date',
+            'status'=>'required|in:en cours,terminé,annulé',
+            'priorite'=>'required|in:faible,moyenne,haute',
+            'budget'=>'nullable|numeric','client_id'=>'nullable|exists:users,id',
+            'employees'=>'nullable|array','progress'=>'nullable|integer|min:0|max:100',
+            'ficher'=>'nullable|file|max:10240',
         ]);
-        if ($request->hasFile('ficher')) {
-            $data['ficher'] = $request->file('ficher')->store('projects','public');
-        }
+        if ($request->hasFile('ficher')) $data['ficher'] = $request->file('ficher')->store('projects','public');
         $project->update($data);
-        if ($request->has('employees')) $project->employees()->sync($request->employees);
+        if ($request->has('employees')) $project->employees()->sync($request->employees ?? []);
         return redirect()->route('admin.projects.index')->with('success','Project updated.');
     }
     public function destroy(Project $project) {

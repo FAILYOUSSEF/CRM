@@ -26,6 +26,9 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        // Route Model Bindings
+        Route::model('role', \Spatie\Permission\Models\Role::class);
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

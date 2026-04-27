@@ -14,17 +14,17 @@
         </dl>
         <div class="text-sm text-gray-700 bg-gray-50 rounded p-3">{{ $ticket->message }}</div>
     </div>
-    @if($ticket->reponce)
+    @if($ticket->response)
     <div class="bg-green-50 border border-green-200 rounded-lg p-4">
         <p class="text-sm font-semibold text-green-700 mb-1">Your reply</p>
-        <p class="text-sm text-green-800">{{ $ticket->reponce }}</p>
+        <p class="text-sm text-green-800">{{ $ticket->response }}</p>
     </div>
     @endif
     <div class="bg-white rounded-lg shadow p-6">
         <h2 class="font-semibold text-gray-700 mb-3">Reply to Ticket</h2>
         <form method="POST" action="{{ route('admin.tickets.reply', $ticket) }}">
             @csrf
-            <textarea name="reponce" rows="4" required placeholder="Type your reply..." class="w-full border border-gray-300 rounded px-3 py-2 text-sm mb-3">{{ old('reponce', $ticket->reponce) }}</textarea>
+            <textarea name="response" rows="4" required placeholder="Type your reply..." class="w-full border border-gray-300 rounded px-3 py-2 text-sm mb-3">{{ old('response', $ticket->response) }}</textarea>
             <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700 text-sm">Send Reply & Close</button>
         </form>
     </div>

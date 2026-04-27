@@ -19,13 +19,13 @@
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full bg-crm-bg3 border-crm-border text-crm-text" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full bg-crm-bg3 border-crm-border text-crm-text" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -45,6 +45,24 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <x-input-label for="phone" :value="__('Phone')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full bg-crm-bg3 border-crm-border text-crm-text" :value="old('phone', $user->phone)" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
+
+        <div>
+            <x-input-label for="addresse" :value="__('Address')" />
+            <x-text-input id="addresse" name="addresse" type="text" class="mt-1 block w-full bg-crm-bg3 border-crm-border text-crm-text" :value="old('addresse', $user->addresse)" autocomplete="street-address" />
+            <x-input-error class="mt-2" :messages="$errors->get('addresse')" />
+        </div>
+
+        <div>
+            <x-input-label for="ville" :value="__('City')" />
+            <x-text-input id="ville" name="ville" type="text" class="mt-1 block w-full bg-crm-bg3 border-crm-border text-crm-text" :value="old('ville', $user->ville)" autocomplete="address-level2" />
+            <x-input-error class="mt-2" :messages="$errors->get('ville')" />
         </div>
 
         <div class="flex items-center gap-4">

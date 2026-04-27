@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder {
     public function run(): void {
+        // 1. Run the PermissionSeeder to create Spatie roles and permissions
+        $this->call(PermissionSeeder::class);
 
         // Admin
         $admin = User::create([
@@ -19,6 +21,7 @@ class DatabaseSeeder extends Seeder {
             'type_client' => 'admin',
             'status'      => 'active',
         ]);
+        $admin->assignRole('admin');
 
         // Employees
         $emp1 = User::create([
@@ -28,6 +31,7 @@ class DatabaseSeeder extends Seeder {
             'type_client' => 'employee',
             'status'      => 'active',
         ]);
+        $emp1->assignRole('employee');
         $emp2 = User::create([
             'name'        => 'Bob Employee',
             'email'       => 'bob@app.com',
@@ -35,6 +39,7 @@ class DatabaseSeeder extends Seeder {
             'type_client' => 'employee',
             'status'      => 'active',
         ]);
+        $emp2->assignRole('employee');
 
         // Client
         $client = User::create([
@@ -44,6 +49,7 @@ class DatabaseSeeder extends Seeder {
             'type_client' => 'client',
             'status'      => 'active',
         ]);
+        $client->assignRole('client');
 
         // Categories
         $cat1 = Categorie::create(['name' => 'Bug Report',   'description' => 'Software bugs']);
@@ -57,7 +63,7 @@ class DatabaseSeeder extends Seeder {
             'status'      => 'en cours',
             'priorite'    => 'haute',
             'budget'      => 50000.00,
-            'date_duree'  => now()->toDateString(),
+            'date_debut'  => now()->toDateString(),
             'date_fin'    => now()->addMonths(3)->toDateString(),
             'client_id'   => $client->id,
         ]);

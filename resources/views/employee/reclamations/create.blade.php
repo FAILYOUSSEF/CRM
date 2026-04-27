@@ -8,7 +8,13 @@
         <div><label class="block text-sm font-medium text-gray-800 mb-1">Title *</label>
             <input name="titre" value="{{ old('titre') }}" required class="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 placeholder-gray-500 bg-white"></div>
         <div><label class="block text-sm font-medium text-gray-800 mb-1">Type</label>
-            <input name="type" value="{{ old('type') }}" placeholder="e.g. HR, Technical..." class="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 placeholder-gray-500 bg-white"></div>
+            <select name="type" class="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 bg-white">
+                <option value="bug" {{ old('type') == 'bug' ? 'selected' : '' }}>Bug</option>
+                <option value="meeting" {{ old('type') == 'meeting' ? 'selected' : '' }}>Meeting</option>
+                <option value="other" {{ old('type') == 'other' ? 'selected' : '' }}>Other</option>
+            </select></div>
+        <div><label class="block text-sm font-medium text-gray-800 mb-1">Other Type Details</label>
+            <input name="type_other" value="{{ old('type_other') }}" placeholder="If 'Other', please specify..." class="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 placeholder-gray-500 bg-white"></div>
         <div><label class="block text-sm font-medium text-gray-800 mb-1">Priority</label>
             <select name="priorite" class="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 bg-white">
                 <option value="faible">Faible</option><option value="moyenne" selected>Moyenne</option><option value="haute">Haute</option>
