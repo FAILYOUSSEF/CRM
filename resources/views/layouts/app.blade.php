@@ -55,10 +55,12 @@
         <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
             
             <!-- Dashboard Link (Dynamic Active State) -->
+            @if(auth()->check() && auth()->user()->isAdmin())
             <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 rounded-crm font-medium transition-colors {{ request()->routeIs('dashboard') ? 'bg-crm-accent/10 text-crm-accent' : 'text-crm-muted hover:text-crm-accent hover:bg-crm-bg3 group' }}">
                 <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dashboard') ? '' : 'text-crm-muted group-hover:text-crm-accent transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 Dashboard
             </a>
+            @endif
 
             @php
                 // Determine the route prefix based on user role (e.g., 'admin.', 'employee.', 'client.')

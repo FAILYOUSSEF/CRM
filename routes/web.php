@@ -17,10 +17,23 @@ Route::get('/', function () {
 // ── COMMON AUTH ROUTES ────────────────────────────────────────
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        $projectCount = \App\Models\Project::count();
-        $taskCount = \App\Models\Task::count();
-        $ticketCount = \App\Models\Ticket::count();
-        return view('dashboard', compact('projectCount', 'taskCount', 'ticketCount'));
+        if (!auth()->user()->isAdmin()) return redirect('/');
+        
+        $projectCount = \App\Models\Project::where('status', 'en cours')->count();
+        $taskCount = \App\Models\Task::whereIn('status', ['à faire', 'en cours'])->count();
+        $ticketCount = \App\Models\Ticket::where('status', 'ouvert')->count();
+        
+        $employeeCount = \App\Models\User::where('type_client', 'employee')->where('status', 'active')->count();
+        $clientCount = \App\Models\User::where('type_client', 'client')->where('status', 'active')->count();
+        
+        $recentTickets = \App\Models\Ticket::with('user', 'project')->where('status', 'ouvert')->latest()->take(5)->get();
+        $pendingMeetings = \App\Models\MeetingRequest::with('requester')->where('status', 'pending')->latest()->take(5)->get();
+
+        return view('dashboard', compact(
+            'projectCount', 'taskCount', 'ticketCount', 
+            'employeeCount', 'clientCount', 
+            'recentTickets', 'pendingMeetings'
+        ));
     })->name('dashboard');
     
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
@@ -56,8 +69,8 @@ Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group
 
     // Meetings
     Route::resource('meetings', App\Http\Controllers\Admin\MeetingController::class);
-    Route::post('meeting-requests/{meetingRequest}/accept', [App\Http\Controllers\Admin\MeetingController::class,'acceptRequest'])->name('meeting-requests.accept');
-    Route::post('meeting-requests/{meetingRequest}/refuse', [App\Http\Controllers\Admin\MeetingController::class,'refuseRequest'])->name('meeting-requests.refuse');
+    Route::post('meeting-requests/{meetingRequest}/accept', [App\Http\Controllers\Admin\MeetingController::class,'acceptRequest'])->name('meetings.acceptRequest');
+    Route::post('meeting-requests/{meetingRequest}/refuse', [App\Http\Controllers\Admin\MeetingController::class,'refuseRequest'])->name('meetings.refuseRequest');
 });
 
 // ── EMPLOYEE ──────────────────────────────────────────────────
