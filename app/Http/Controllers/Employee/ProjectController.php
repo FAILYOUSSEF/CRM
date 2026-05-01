@@ -17,17 +17,4 @@ class ProjectController extends Controller {
         $project->load('client','tasks','employees');
         return view('employee.projects.show', compact('project'));
     }
-    public function edit(Project $project) {
-        abort_unless(auth()->user()->projects->contains($project->id), 403);
-        return view('employee.projects.edit', compact('project'));
-    }
-    public function update(Request $request, Project $project) {
-        abort_unless(auth()->user()->projects->contains($project->id), 403);
-        $data = $request->validate([
-            'status'=>'required|in:en cours,terminé,annulé',
-            'progress'=>'nullable|integer|min:0|max:100',
-        ]);
-        $project->update($data);
-        return redirect()->route('employee.projects.show',$project)->with('success','Project updated.');
-    }
 }

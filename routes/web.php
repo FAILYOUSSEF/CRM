@@ -44,7 +44,12 @@ Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group
 
     // Reclamations
     Route::get('reclamations',                      [App\Http\Controllers\Admin\ReclamationController::class,'index'])->name('reclamations.index');
+    Route::get('reclamations/create',               [App\Http\Controllers\Admin\ReclamationController::class,'create'])->name('reclamations.create');
+    Route::post('reclamations',                     [App\Http\Controllers\Admin\ReclamationController::class,'store'])->name('reclamations.store');
     Route::get('reclamations/{reclamation}',        [App\Http\Controllers\Admin\ReclamationController::class,'show'])->name('reclamations.show');
+    Route::get('reclamations/{reclamation}/edit',   [App\Http\Controllers\Admin\ReclamationController::class,'edit'])->name('reclamations.edit');
+    Route::put('reclamations/{reclamation}',        [App\Http\Controllers\Admin\ReclamationController::class,'update'])->name('reclamations.update');
+    Route::patch('reclamations/{reclamation}',      [App\Http\Controllers\Admin\ReclamationController::class,'update']);
     Route::post('reclamations/{reclamation}/reply', [App\Http\Controllers\Admin\ReclamationController::class,'reply'])->name('reclamations.reply');
     Route::post('reclamations/{reclamation}/assign',[App\Http\Controllers\Admin\ReclamationController::class,'assign'])->name('reclamations.assign');
     Route::delete('reclamations/{reclamation}',     [App\Http\Controllers\Admin\ReclamationController::class,'destroy'])->name('reclamations.destroy');
@@ -57,7 +62,7 @@ Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group
 
 // ── EMPLOYEE ──────────────────────────────────────────────────
 Route::middleware(['auth','role:employee'])->prefix('employee')->name('employee.')->group(function () {
-    Route::resource('projects', App\Http\Controllers\Employee\ProjectController::class)->only(['index','show','edit','update']);
+    Route::resource('projects', App\Http\Controllers\Employee\ProjectController::class)->only(['index','show']);
     Route::get('tasks',                      [App\Http\Controllers\Employee\TaskController::class,'index'])->name('tasks.index');
     Route::get('tasks/{task}',               [App\Http\Controllers\Employee\TaskController::class,'show'])->name('tasks.show');
     Route::patch('tasks/{task}',             [App\Http\Controllers\Employee\TaskController::class,'update'])->name('tasks.update');

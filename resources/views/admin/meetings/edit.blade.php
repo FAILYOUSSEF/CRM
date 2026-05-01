@@ -62,7 +62,7 @@
             @error('status') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
         </div>
         <div class="flex items-center gap-4 pt-4 border-t border-crm-border mt-6">
-            <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-blue-500 font-bold transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5">
+            <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-black font-bold transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5">
                 Update Meeting
             </button>
             <a href="{{ route('admin.meetings.index') }}" class="text-crm-muted hover:text-crm-text transition-colors text-sm font-medium">Cancel</a>

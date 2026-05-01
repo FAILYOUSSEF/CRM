@@ -40,7 +40,7 @@
         </div>
 
         <div class="flex items-center gap-3 pt-4 border-t border-crm-border">
-            <button type="submit" class="px-5 py-2.5 bg-crm-accent hover:bg-crm-accent/90 text-white text-sm font-medium rounded-crm transition-colors">Create Role</button>
+            <button type="submit" class="px-5 py-2.5 bg-crm-accent hover:bg-black text-white text-sm font-medium rounded-crm transition-colors">Create Role</button>
             <a href="{{ route('admin.roles.index') }}" class="px-5 py-2.5 text-crm-muted hover:text-crm-text text-sm transition-colors">Cancel</a>
         </div>
     </form>

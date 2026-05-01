@@ -1,5 +1,6 @@
 <?php
 namespace App\Models;
+use App\Notifications\CustomResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -29,4 +30,9 @@ class User extends Authenticatable {
     public function meetings()        { return $this->belongsToMany(Meeting::class, 'meeting_user')->withPivot('response'); }
     public function createdMeetings() { return $this->hasMany(Meeting::class, 'created_by'); }
     public function meetingRequests() { return $this->hasMany(MeetingRequest::class, 'requested_by'); }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new CustomResetPasswordNotification($token));
+    }
 }

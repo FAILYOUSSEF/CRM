@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold text-crm-text tracking-tight">Users</h1>
-    <a href="{{ route('admin.users.create') }}" class="bg-crm-accent text-white px-4 py-2.5 rounded-crm hover:bg-blue-500 transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5 text-sm font-bold">+ New User</a>
+    <a href="{{ route('admin.users.create') }}" class="bg-crm-accent text-white px-4 py-2.5 rounded-crm hover:bg-black transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5 text-sm font-bold">+ New User</a>
 </div>
 
 <!-- Dashboard Stats Overview -->
@@ -118,12 +118,25 @@
                 <td class="px-6 py-4">
                     <span class="px-2.5 py-1 rounded-full text-xs font-medium border {{ $user->status === 'active' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20' }}">{{ $user->status }}</span>
                 </td>
-                <td class="px-6 py-4 flex justify-end gap-4">
-                    <a href="{{ route('admin.users.show', $user) }}" class="text-crm-muted hover:text-blue-400 transition-colors font-medium">View</a>
-                    <a href="{{ route('admin.users.edit', $user) }}" class="text-crm-muted hover:text-yellow-400 transition-colors font-medium">Edit</a>
+                <td class="px-6 py-4 flex justify-end gap-3">
+                    <a href="{{ route('admin.users.show', $user) }}" title="View" aria-label="View user" class="text-crm-muted hover:text-crm-accent transition-colors font-medium text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </a>
+                    <a href="{{ route('admin.users.edit', $user) }}" title="Edit" aria-label="Edit user" class="text-crm-muted hover:text-yellow-400 transition-colors font-medium text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </a>
                     <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Delete user?')">
                         @csrf @method('DELETE')
-                        <button class="text-crm-muted hover:text-red-400 transition-colors font-medium">Delete</button>
+                        <button title="Delete" aria-label="Delete user" class="text-crm-muted hover:text-red-400 transition-colors font-medium text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
                     </form>
                 </td>
             </tr>

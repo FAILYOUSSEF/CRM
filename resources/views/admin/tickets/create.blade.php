@@ -65,7 +65,7 @@
         </div>
 
         <div class="flex gap-2">
-            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700">Create Ticket</button>
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-black">Create Ticket</button>
             <a href="{{ route('admin.tickets.index') }}" class="text-gray-600 hover:underline py-2">Cancel</a>
         </div>
     </form>

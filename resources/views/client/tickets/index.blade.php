@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold text-crm-text tracking-tight">My Tickets</h1>
-    <a href="{{ route('client.tickets.create') }}" class="bg-crm-accent text-white px-4 py-2.5 rounded-crm hover:bg-blue-500 transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5 text-sm font-bold">+ New Ticket</a>
+    <a href="{{ route('client.tickets.create') }}" class="bg-crm-accent text-white px-4 py-2.5 rounded-crm hover:bg-black transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5 text-sm font-bold">+ New Ticket</a>
 </div>
 <div class="space-y-4">
     @forelse($tickets as $ticket)
@@ -26,5 +26,8 @@
         <p class="text-crm-muted">No tickets submitted.</p>
     </div>
     @endforelse
+</div>
+<div class="mt-4">
+    {{ $tickets->links() }}
 </div>
 @endsection

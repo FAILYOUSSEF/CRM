@@ -35,7 +35,7 @@
         </div>
 
         <div class="pt-4">
-            <button type="submit" class="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-crm text-sm font-bold text-white bg-crm-accent hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-crm-surface focus:ring-crm-accent shadow-lg shadow-crm-accent/30 transition-all duration-200 transform hover:-translate-y-0.5">
+            <button type="submit" class="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-crm text-sm font-bold text-white bg-crm-accent hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-crm-surface focus:ring-crm-accent shadow-lg shadow-crm-accent/30 transition-all duration-200 transform hover:-translate-y-0.5">
                 {{ __('Reset Password') }}
             </button>
         </div>

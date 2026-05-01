@@ -67,7 +67,7 @@
             <label class="block mb-1 font-semibold text-gray-800">Comment</label>
             <textarea name="commentaire" class="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 bg-white">{{ old('commentaire') }}</textarea>
         </div>
-        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700">Create Task</button>
+        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-black">Create Task</button>
         <a href="{{ route('admin.tasks.index') }}" class="ml-4 text-gray-600 hover:underline">Cancel</a>
     </form>
 </div>

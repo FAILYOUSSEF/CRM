@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Ticket: ' . $ticket->sujet)
 @section('content')
-<div class="max-w-2xl mx-auto">
+<div class="max-w-2xl mx-auto min-w-0">
     <div class="bg-white rounded-lg shadow p-6 mb-6">
         <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $ticket->sujet }}</h1>
         <p class="text-gray-600 mb-4">{{ $ticket->project->titre }}</p>
@@ -28,12 +28,12 @@
             </div>
         </div>
         <div class="mb-6 bg-gray-50 rounded p-4">
-            <p class="text-sm text-gray-700">{{ $ticket->message }}</p>
+            <p class="text-sm text-gray-700 break-anywhere whitespace-pre-wrap max-w-full overflow-hidden">{{ $ticket->message }}</p>
         </div>
         @if($ticket->response)
         <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
             <p class="text-sm font-semibold text-green-700 mb-2">Admin Response</p>
-            <p class="text-sm text-green-800">{{ $ticket->response }}</p>
+            <p class="text-sm text-green-800 break-anywhere whitespace-pre-wrap max-w-full overflow-hidden">{{ $ticket->response }}</p>
         </div>
         @endif
     </div>

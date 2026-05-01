@@ -29,4 +29,20 @@
     --color-crm-border: rgba(255, 255, 255, 0.12);
   }
 }
+@layer base {
+  main * {
+    min-width: 0;
+  }
 
+  main :where(p, dd, td, textarea, .break-anywhere) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  textarea {
+    max-width: 100%;
+    overflow-x: hidden;
+    resize: vertical;
+    white-space: pre-wrap;
+  }
+}

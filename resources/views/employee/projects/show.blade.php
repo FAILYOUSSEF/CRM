@@ -46,7 +46,6 @@
         @endif
     </div>
     <div class="flex gap-4">
-        <a href="{{ route('employee.projects.edit', $project) }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Edit Project</a>
         <a href="{{ route('employee.projects.index') }}" class="text-gray-600 hover:underline px-4 py-2">Back to Projects</a>
     </div>
 </div>

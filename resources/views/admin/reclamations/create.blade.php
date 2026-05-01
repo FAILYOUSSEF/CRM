@@ -38,8 +38,9 @@
             <label for="priorite" class="block text-sm font-medium text-crm-muted mb-1">Priority</label>
             <select name="priorite" id="priorite" class="block w-full bg-crm-bg3 border border-crm-border rounded-crm text-crm-text focus:ring-2 focus:ring-crm-accent focus:border-crm-accent transition-all duration-200 sm:text-sm py-2.5" required>
                 <option value="faible" @selected(old('priorite') == 'faible')>Low</option>
-                <option value="moyen" @selected(old('priorite') == 'moyen')>Medium</option>
-                <option value="urgent" @selected(old('priorite') == 'urgent')>High</option>
+                <option value="moyenne" @selected(old('priorite') == 'moyenne')>Medium</option>
+                <option value="haute" @selected(old('priorite') == 'haute')>High</option>
+                <option value="critique" @selected(old('priorite') == 'critique')>Critical</option>
             </select>
             @error('priorite') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
         </div>
@@ -66,12 +67,13 @@
             <select name="status" id="status" class="block w-full bg-crm-bg3 border border-crm-border rounded-crm text-crm-text focus:ring-2 focus:ring-crm-accent focus:border-crm-accent transition-all duration-200 sm:text-sm py-2.5" required>
                 <option value="en attente" @selected(old('status') == 'en attente')>Pending</option>
                 <option value="traité" @selected(old('status') == 'traité')>Treated</option>
+                <option value="resolu" @selected(old('status') == 'resolu')>Resolved</option>
             </select>
             @error('status') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
         </div>
 
         <div class="flex items-center gap-4 pt-4 border-t border-crm-border mt-6">
-            <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-blue-500 font-bold transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5">
+            <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-black font-bold transition-all duration-200 shadow-lg shadow-crm-accent/30 transform hover:-translate-y-0.5">
                 Create Reclamation
             </button>
             <a href="{{ route('admin.reclamations.index') }}" class="text-crm-muted hover:text-crm-text transition-colors text-sm font-medium">Cancel</a>

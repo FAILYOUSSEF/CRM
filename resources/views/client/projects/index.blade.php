@@ -7,7 +7,7 @@
     <form method="GET" action="{{ route('client.projects.index') }}" class="flex gap-3">
         <input type="text" name="search" placeholder="Search projects..." value="{{ request('search') }}" 
             class="flex-1 px-4 py-2 border border-crm-border bg-crm-bg3 rounded-crm text-crm-text placeholder-crm-muted/50 focus:ring-2 focus:ring-crm-accent focus:border-crm-accent transition-all">
-        <button type="submit" class="px-6 py-2 bg-crm-accent text-white rounded-crm hover:bg-blue-500 transition-colors font-medium">
+        <button type="submit" class="px-6 py-2 bg-crm-accent text-white rounded-crm hover:bg-black transition-colors font-medium">
             Search
         </button>
     </form>
@@ -55,7 +55,7 @@
 
                 <!-- View Details Button -->
                 <a href="{{ route('client.projects.show', $project) }}" 
-                    class="px-4 py-2 bg-crm-accent text-white rounded-crm hover:bg-blue-500 transition-colors text-sm font-medium text-center">
+                    class="px-4 py-2 bg-crm-accent text-white rounded-crm hover:bg-black transition-colors text-sm font-medium text-center">
                     View Details
                 </a>
             </div>

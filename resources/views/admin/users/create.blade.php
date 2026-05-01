@@ -53,7 +53,7 @@
         <div><label class="block text-sm font-medium text-gray-700 mb-1">Address</label><input name="addresse" value="{{ old('addresse') }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm"></div>
         <div><label class="block text-sm font-medium text-gray-700 mb-1">Contract File</label><input type="file" name="fichier_de_contrat" class="text-sm text-gray-500"></div>
         <div class="flex gap-3 pt-2">
-            <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700 text-sm">Create User</button>
+            <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded hover:bg-black text-sm">Create User</button>
             <a href="{{ route('admin.users.index') }}" class="text-gray-600 hover:underline text-sm py-2">Cancel</a>
         </div>
     </form>

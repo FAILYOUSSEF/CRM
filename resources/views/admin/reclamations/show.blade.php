@@ -43,7 +43,7 @@
                             <option value="{{ $emp->id }}" @selected($reclamation->assigned_to == $emp->id)>{{ $emp->name }}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-blue-500 font-bold transition-all duration-200 text-sm">Assign</button>
+                    <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-black font-bold transition-all duration-200 text-sm">Assign</button>
                 </div>
             </form>
         </div>
@@ -53,7 +53,7 @@
             <form method="POST" action="{{ route('admin.reclamations.reply', $reclamation) }}">
                 @csrf
                 <textarea name="response" rows="4" required placeholder="Type your reply..." class="block w-full bg-crm-bg3 border border-crm-border rounded-crm text-crm-text placeholder-crm-muted/50 focus:ring-2 focus:ring-crm-accent focus:border-crm-accent transition-all duration-200 sm:text-sm py-2.5 mb-3">{{ old('response', $reclamation->response) }}</textarea>
-                <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-blue-500 font-bold transition-all duration-200 text-sm">Send Reply</button>
+                <button type="submit" class="bg-crm-accent text-white px-5 py-2.5 rounded-crm hover:bg-black font-bold transition-all duration-200 text-sm">Send Reply</button>
             </form>
         </div>
 

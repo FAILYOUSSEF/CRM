@@ -2,9 +2,12 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\AdminCreatedUserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
+use Throwable;
  
 class UserController extends Controller {
     public function __construct() {
@@ -51,7 +54,7 @@ class UserController extends Controller {
         $data = $request->validate([
             'name'=>'required','email'=>'required|email|unique:users',
             'password'=>'required|min:8|confirmed',
-            'roles'=>'required|array','type_client'=>'required|in:admin,employee,client',
+            'roles'=>'nullable|array','type_client'=>'required|in:admin,employee,client',
             'status'=>'required|in:active,inactive',
             'phone'=>'nullable','cin'=>'nullable','salaire'=>'nullable|numeric',
             'type_contrat'=>'nullable','addresse'=>'nullable','ville'=>'nullable',
@@ -60,9 +63,28 @@ class UserController extends Controller {
         if ($request->hasFile('fichier_de_contrat')) {
             $data['fichier_de_contrat'] = $request->file('fichier_de_contrat')->store('contracts', 'public');
         }
+        $plainPassword = $data['password'];
+        $roles = $request->input('roles', [$data['type_client']]);
+        unset($data['roles']);
+
         $user = User::create(array_merge($data, ['password' => Hash::make($data['password'])]));
-        $user->syncRoles($request->roles);
-        return redirect()->route('admin.users.index')->with('success','User created.');
+        $user->syncRoles($roles);
+
+        try {
+            $user->notify(new AdminCreatedUserNotification($user->email, $plainPassword));
+        } catch (Throwable $exception) {
+            Log::warning('New user email notification failed.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $exception->getMessage(),
+            ]);
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('warning', 'User created, but the login email could not be sent. Please check mail settings.');
+        }
+
+        return redirect()->route('admin.users.index')->with('success','User created and login email sent.');
     }
     public function show(User $user) {
         return view('admin.users.show', compact('user'));
@@ -75,7 +97,7 @@ class UserController extends Controller {
     public function update(Request $request, User $user) {
         $data = $request->validate([
             'name'=>'required','email'=>'required|email|unique:users,email,'.$user->id,
-            'roles'=>'required|array','type_client'=>'required|in:admin,employee,client',
+            'roles'=>'nullable|array','type_client'=>'required|in:admin,employee,client',
             'status'=>'required|in:active,inactive',
             'phone'=>'nullable','cin'=>'nullable','salaire'=>'nullable|numeric',
             'type_contrat'=>'nullable','addresse'=>'nullable','ville'=>'nullable',

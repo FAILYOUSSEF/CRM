@@ -6,7 +6,7 @@
     <p class="text-gray-500 mt-2 text-sm">We are here to help. Fill out the form below to report an issue or request a meeting.</p>
 </div>
 <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-8 max-w-2xl border border-gray-100">
-    <form method="POST" action="{{ route('client.reclamations.store') }}" class="space-y-4">
+    <form method="POST" action="{{ route('client.reclamations.store') }}" class="space-y-4" x-data="{ type: '{{ old('type', 'bug') }}' }">
         @csrf
         <div class="space-y-5">
             <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Title <span class="text-red-500">*</span></label>
@@ -14,7 +14,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Type</label>
-                <select name="type" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-gray-900 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 cursor-pointer">
+                <select name="type" x-model="type" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-gray-900 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 cursor-pointer">
                 <option value="bug" {{ old('type') == 'bug' ? 'selected' : '' }}>Bug</option>
                 <option value="meeting" {{ old('type') == 'meeting' ? 'selected' : '' }}>Meeting</option>
                 <option value="other" {{ old('type') == 'other' ? 'selected' : '' }}>Other</option>
@@ -24,7 +24,7 @@
                 <option value="faible">Faible</option><option value="moyenne" selected>Moyenne</option><option value="haute">Haute</option>
                 </select></div>
             </div>
-            <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Other Type Details <span class="text-gray-400 font-normal">(Optional)</span></label>
+            <div x-show="type === 'other'" x-cloak><label class="block text-sm font-semibold text-gray-700 mb-1.5">Other Type Details <span class="text-gray-400 font-normal">(Optional)</span></label>
                 <input name="type_other" value="{{ old('type_other') }}" placeholder="If 'Other' is selected, please specify" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-gray-900 placeholder-gray-400 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"></div>
             <div><label class="block text-sm font-semibold text-gray-700 mb-1.5">Description <span class="text-red-500">*</span></label>
                 <textarea name="description" rows="5" required placeholder="Provide as much detail as possible..." class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-gray-900 placeholder-gray-400 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 resize-y">{{ old('description') }}</textarea></div>

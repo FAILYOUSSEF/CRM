@@ -48,9 +48,54 @@ class ReclamationController extends Controller {
 
         return view('admin.reclamations.index', compact('reclamations', 'filterOptions'));
     }
+    public function create() {
+        $users = User::whereIn('type_client', ['employee', 'client'])->orderBy('name')->get();
+        return view('admin.reclamations.create', compact('users'));
+    }
+
+    public function store(Request $request) {
+        $data = $request->validate([
+            'titre' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'type_other' => 'nullable|string|max:255',
+            'priorite' => 'required|string|max:255',
+            'description' => 'required|string',
+            'assigned_to' => 'nullable|exists:users,id',
+            'status' => 'required|string|max:255',
+        ]);
+
+        $data['user_id'] = auth()->id();
+        $data['date'] = now()->toDateString();
+
+        Reclamation::create($data);
+
+        return redirect()->route('admin.reclamations.index')->with('success', 'Reclamation created.');
+    }
+
     public function show(Reclamation $reclamation) {
         $employees = User::where('type_client','employee')->get();
         return view('admin.reclamations.show', compact('reclamation','employees'));
+    }
+
+    public function edit(Reclamation $reclamation) {
+        $users = User::whereIn('type_client', ['employee', 'client'])->orderBy('name')->get();
+        return view('admin.reclamations.edit', compact('reclamation', 'users'));
+    }
+
+    public function update(Request $request, Reclamation $reclamation) {
+        $data = $request->validate([
+            'titre' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'type_other' => 'nullable|string|max:255',
+            'priorite' => 'required|string|max:255',
+            'description' => 'required|string',
+            'assigned_to' => 'nullable|exists:users,id',
+            'status' => 'required|string|max:255',
+        ]);
+
+        $reclamation->update($data);
+
+        return redirect()->route('admin.reclamations.show', $reclamation)->with('success', 'Reclamation updated.');
     }
     public function reply(Request $request, Reclamation $reclamation) {
         $request->validate(['response'=>'required|string']);

@@ -20,7 +20,7 @@
             <p class="text-sm text-crm-muted mb-4">{{ $project->description }}</p>
         @endif
         <div class="flex gap-2">
-            <a href="{{ route('employee.projects.show', $project) }}" class="text-crm-accent hover:text-blue-400 transition-colors font-medium text-sm">View Details →</a>
+            <a href="{{ route('employee.projects.show', $project) }}" class="text-crm-accent hover:text-black transition-colors font-medium text-sm">View Details →</a>
         </div>
     </div>
     @empty
@@ -28,5 +28,8 @@
         <p class="text-crm-muted">No projects assigned.</p>
     </div>
     @endforelse
+</div>
+<div class="mt-4">
+    {{ $projects->links() }}
 </div>
 @endsection
