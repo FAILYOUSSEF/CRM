@@ -106,6 +106,9 @@
                                 <form method="POST" action="{{ route('admin.meetings.acceptRequest', $req) }}">
                                     @csrf <button type="submit" class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg transition-colors border border-emerald-200" title="Accept"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></button>
                                 </form>
+                                <form method="POST" action="{{ route('admin.meetings.refuseRequest', $req) }}">
+                                    @csrf <button type="submit" class="text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition-colors border border-red-200" title="Refuse"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                                </form>
                             </div>
                         </div>
                     </div>

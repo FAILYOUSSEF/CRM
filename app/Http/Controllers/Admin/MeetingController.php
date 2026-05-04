@@ -66,8 +66,23 @@ class MeetingController extends Controller {
         return redirect()->route('admin.meetings.index')->with('success','Meeting deleted.');
     }
     public function acceptRequest(MeetingRequest $meetingRequest) {
-        $meetingRequest->update(['status'=>'accepted']);
-        return back()->with('success','Request accepted.');
+        // Create a meeting from the request
+        $meeting = Meeting::create([
+            'titre' => $meetingRequest->titre,
+            'description' => $meetingRequest->description,
+            'date_heure' => $meetingRequest->preferred_date ?? now()->addDays(7),
+            'type' => 'online',
+            'status' => 'planifié',
+            'created_by' => auth()->id(),
+        ]);
+        
+        // Add the requester as a participant
+        $meeting->participants()->sync([$meetingRequest->requested_by => ['response' => 'pending']]);
+        
+        // Update the request status
+        $meetingRequest->update(['status' => 'accepted']);
+        
+        return back()->with('success', 'Meeting request accepted and meeting scheduled.');
     }
     public function refuseRequest(MeetingRequest $meetingRequest) {
         $meetingRequest->update(['status'=>'refused']);

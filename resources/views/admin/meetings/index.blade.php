@@ -67,4 +67,47 @@
     <div class="mt-6 text-crm-muted">
         {{ $meetings->links() }}
     </div>
+
+    <!-- Pending Meeting Requests Section -->
+    <div class="mt-8 bg-crm-surface border border-crm-border rounded-crm shadow-sm overflow-hidden">
+        <div class="bg-crm-bg2 border-b border-crm-border px-6 py-4">
+            <h2 class="text-lg font-bold text-crm-text">Pending Meeting Requests</h2>
+        </div>
+        <div class="divide-y divide-crm-border">
+            @forelse($requests as $req)
+                <div class="p-6 hover:bg-crm-bg3/50 transition-colors">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-crm-text mb-2">{{ $req->titre }}</h3>
+                            <p class="text-xs text-crm-muted mb-1">Requested by: <span class="font-medium text-crm-text">{{ $req->requester->name ?? 'Unknown' }}</span></p>
+                            @if($req->description)
+                                <p class="text-xs text-crm-muted mb-2">{{ $req->description }}</p>
+                            @endif
+                            @if($req->preferred_date)
+                                <p class="text-xs text-crm-muted">Preferred Date: <span class="font-medium text-crm-text">{{ \Carbon\Carbon::parse($req->preferred_date)->format('d M Y') }}</span></p>
+                            @endif
+                        </div>
+                        <div class="flex gap-2 ml-4">
+                            <form method="POST" action="{{ route('admin.meetings.acceptRequest', $req) }}">
+                                @csrf
+                                <button type="submit" title="Accept" class="bg-green-500/10 hover:bg-green-500/20 text-green-500 px-3 py-2 rounded-crm transition-colors border border-green-500/30 text-xs font-medium">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Accept
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ route('admin.meetings.refuseRequest', $req) }}">
+                                @csrf
+                                <button type="submit" title="Refuse" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-2 rounded-crm transition-colors border border-red-500/30 text-xs font-medium">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    Refuse
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-crm-muted text-sm">No pending meeting requests.</div>
+            @endforelse
+        </div>
+    </div>
 @endsection
